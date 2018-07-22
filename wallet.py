@@ -49,8 +49,23 @@ def load_or_create():
         with open(WALLET_FILE, 'w') as f:
             f.write(wallet_contents)
         print "Created new wallet in", WALLET_FILE
-        
+
     print "Your wallet address is:", public
+
+def create_new_wallet( filename ):
+    """ Create a brand new wallet
+    """
+    # Create a new address and dump it.
+    private, public = generate_keys()
+
+    wallet_contents = json.dumps({
+        'public': public,
+        'private': private
+    })
+
+    with open(filename, 'w') as f:
+        f.write(wallet_contents)
+    print "Created new wallet in", filename
 
 def load_blockchain():
     server_blockchain = get_route('blockchain', json=False)
@@ -101,7 +116,7 @@ def transaction(receiver, amount):
         with open(TXN_FILE, 'r') as f:
             txns_json = f.read()
             txns = jsonpickle.decode(txns_json)
-    
+
     txns.append(t)
     with open(TXN_FILE, 'w') as f:
         f.write(jsonpickle.encode(txns))
@@ -129,9 +144,11 @@ def start_repl():
             amount = int(command[2])
 
             transaction(payee, amount)
-        
+
 if __name__ == "__main__":
     print_header()
     load_or_create()
+
+    # create_new_wallet("new_wallet.json")
 
     start_repl()

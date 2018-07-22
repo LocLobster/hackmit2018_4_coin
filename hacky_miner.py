@@ -144,7 +144,7 @@ def run_miner():
         # Loc:  Set up attack
         is_attacking = False
         if balance > 60:
-            print "Setting up Finney attack"
+            print "Setting up double spend attack"
             is_attacking = True
             t = Transaction(
                 id = gen_uuid(),
@@ -188,11 +188,6 @@ def run_miner():
         if new_chain.head.hash_block() == blockchain.head.hash_block():
             # WE MINED THIS BLOCK YAY.
             # AND WE WIN.
-
-
-            # Loc: Add in a Finney attack to double spend the coin
-
-
 
             resp = get_route('add', data=str(b))
             if resp['success']:
